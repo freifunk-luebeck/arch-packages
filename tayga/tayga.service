@@ -1,0 +1,9 @@
+[Unit]
+Description=Tayga
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/tayga --nodetach
+
+[Install]
+WantedBy=multi-user.target

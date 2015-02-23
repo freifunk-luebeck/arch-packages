@@ -1,0 +1,34 @@
+# Maintainer: Thomas Weißschuh <thomas t-8ch de>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+
+pkgname=batman-adv-legacy-git-lts
+pkgver=2013.4.0
+pkgrel=2
+pkgdesc='batman kernel module'
+arch=('i686' 'x86_64')
+url='http://www.open-mesh.net/'
+license=('GPL')
+install='batman-adv.install'
+source=("https://github.com/freifunk-gluon/batman-adv-legacy/archive/master.zip"
+        'batman-adv.install')
+depends=('linux-lts')
+makedepends=('linux-lts-headers')
+
+_kernmajor="$(pacman -Q linux-lts-headers | awk '{print $2}' | cut -d - -f1 | cut -d . -f1,2)"
+_extramodules="extramodules-${_kernmajor}-lts"
+_kernver="$(cat /usr/lib/modules/${_extramodules}/version)"
+
+
+build() {
+  cd "${srcdir}/batman-adv-legacy-master"
+  make KERNELPATH=/usr/lib/modules/${_kernver}/build
+}
+
+package() {
+  cd "${srcdir}/batman-adv-legacy-master"
+  install -D -m644 batman-adv.ko "${pkgdir}/usr/lib/modules/${_extramodules}/batman-adv.ko"
+  install -D -m644 README "${pkgdir}/usr/share/doc/batman-adv/README"
+}
+
+
+sha256sums=('SKIP' '347599c02426a905690002885c277f91b82da2b29d3372348e5f02d03c435c37')
