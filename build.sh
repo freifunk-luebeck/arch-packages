@@ -2,7 +2,7 @@
 
 for d in */; do
   pushd $d
-  makepkg -f --sign && cp -v *.pkg.tar.xz* ../repo/ || break
+  makepkg -C -f --sign && cp -v *.pkg.tar.xz* ../repo/ || break
   popd
 done
 
